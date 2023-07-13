@@ -24,7 +24,7 @@ def factorize_rsa_number(number):
 
 def factorize_file(filename):
     with open(filename, 'r') as file:
-        number = int(file.readline())
+        number = int(file.readline().strip())
         factor1, factor2 = factorize_rsa_number(number)
         if factor1 is not None and factor2 is not None:
             print(f"{number}={factor1}*{factor2}")

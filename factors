@@ -6,10 +6,10 @@ import sys
 
 def factorize_number(number):
     """Find two small numbers that multiply to give a given number"""
-    factors = []
-    for i in range(2, int(number**0.5) + 1):
+    factors = set()
+    for i in range(2, number // 2 + 1):
         if number % i == 0:
-            factors.append((i, number // i))
+            factors.add((i, number // i))
     return factors
 
 
@@ -18,9 +18,13 @@ def factorize_file(filename):
         for line in file:
             number = int(line)
             factors = factorize_number(number)
-            for factor_pair in factors:
-                factor1, factor2 = factor_pair
-                print(f"{number}={factor1}*{factor2}")
+            if not factors:
+                print(f"{number} is prime")
+            else:
+                for factor_pair in factors:
+                    factor1, factor2 = factor_pair
+                    if factor1 <= factor2:  # Ensure unique factorizations
+                        print(f"{number}={factor1}*{factor2}")
 
 
 if __name__ == "__main__":
