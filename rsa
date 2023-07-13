@@ -1,0 +1,39 @@
+#!/usr/bin/python3
+"""Factorize given set of numbers in a file to product of two prime numbers"""
+
+import sys
+
+
+def is_prime(number):
+    """Check if a number is prime"""
+    if number < 2:
+        return False
+    for i in range(2, int(number ** 0.5) + 1):
+        if number % i == 0:
+            return False
+    return True
+
+
+def factorize_rsa_number(number):
+    """Find the two prime numbers that multiply to give an RSA number"""
+    for i in range(2, int(number ** 0.5) + 1):
+        if number % i == 0 and is_prime(i) and is_prime(number // i):
+            return i, number // i
+    return None, None
+
+
+def factorize_file(filename):
+    with open(filename, 'r') as file:
+        number = int(file.readline())
+        factor1, factor2 = factorize_rsa_number(number)
+        if factor1 is not None and factor2 is not None:
+            print(f"{number}={factor1}*{factor2}")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: rsa <file>")
+        sys.exit(1)
+
+    filename = sys.argv[1]
+    factorize_file(filename)
