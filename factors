@@ -1,36 +1,38 @@
 #!/usr/bin/python3
-"""Factorize given set of numbers in a file to product of two small numbers"""
+
+"""
+Factorize numbers from a file into two factors p and q.
+
+Usage:
+    python factors.py <file>
+
+Where <file> contains one number per line to factor.
+
+Output format:
+    n=p*q
+
+Factors p and q don't have to be prime,
+but should be the smallest possible factors of n.
+
+Stops after factorizing for 5 seconds.
+"""
 
 import sys
+import time
 
+start_time = time.time()
 
-def factorize_number(number):
-    """Find two small numbers that multiply to give a given number"""
-    factors = set()
-    for i in range(2, number // 2 + 1):
-        if number % i == 0:
-            factors.add((i, number // i))
-    return factors
+with open(sys.argv[1]) as f:
+    for line in f:
+        n = int(line.strip())
 
+        for i in range(2, int(n**0.5)+1):
+            if n % i == 0:
+                p = i
+                q = n // i
+                print(f"{n}={p}*{q}")
+                break
 
-def factorize_file(filename):
-    with open(filename, 'r') as file:
-        for line in file:
-            number = int(line)
-            factors = factorize_number(number)
-            if not factors:
-                print(f"{number} is prime")
-            else:
-                for factor_pair in factors:
-                    factor1, factor2 = factor_pair
-                    if factor1 <= factor2:  # Ensure unique factorizations
-                        print(f"{number}={factor1}*{factor2}")
-
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: factors <file>")
-        sys.exit(1)
-
-    filename = sys.argv[1]
-    factorize_file(filename)
+        if time.time() - start_time > 5:
+            print("Time limit exceeded")
+            break
